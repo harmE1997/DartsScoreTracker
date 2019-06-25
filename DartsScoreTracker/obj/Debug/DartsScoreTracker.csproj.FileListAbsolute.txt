@@ -18,3 +18,13 @@ C:\Users\Administrator\Documents\Small Own Software\DartsScoreTracker\DartsScore
 C:\Users\Administrator\Documents\Small Own Software\DartsScoreTracker\DartsScoreTracker\obj\Debug\DartsScoreTracker.csproj.CoreCompileInputs.cache
 C:\Users\Administrator\Documents\Small Own Software\DartsScoreTracker\DartsScoreTracker\obj\Debug\DartsScoreTracker.exe
 C:\Users\Administrator\Documents\Small Own Software\DartsScoreTracker\DartsScoreTracker\obj\Debug\DartsScoreTracker.pdb
+C:\Users\Administrator\Documents\GitHub\Small Own Software\DartsScoreTracker\DartsScoreTracker\bin\Debug\DartsScoreTracker.exe.config
+C:\Users\Administrator\Documents\GitHub\Small Own Software\DartsScoreTracker\DartsScoreTracker\bin\Debug\DartsScoreTracker.exe
+C:\Users\Administrator\Documents\GitHub\Small Own Software\DartsScoreTracker\DartsScoreTracker\bin\Debug\DartsScoreTracker.pdb
+C:\Users\Administrator\Documents\GitHub\Small Own Software\DartsScoreTracker\DartsScoreTracker\obj\Debug\DartsScoreTracker.csprojAssemblyReference.cache
+C:\Users\Administrator\Documents\GitHub\Small Own Software\DartsScoreTracker\DartsScoreTracker\obj\Debug\DartsScoreTracker.Form1.resources
+C:\Users\Administrator\Documents\GitHub\Small Own Software\DartsScoreTracker\DartsScoreTracker\obj\Debug\DartsScoreTracker.Properties.Resources.resources
+C:\Users\Administrator\Documents\GitHub\Small Own Software\DartsScoreTracker\DartsScoreTracker\obj\Debug\DartsScoreTracker.csproj.GenerateResource.cache
+C:\Users\Administrator\Documents\GitHub\Small Own Software\DartsScoreTracker\DartsScoreTracker\obj\Debug\DartsScoreTracker.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\Documents\GitHub\Small Own Software\DartsScoreTracker\DartsScoreTracker\obj\Debug\DartsScoreTracker.exe
+C:\Users\Administrator\Documents\GitHub\Small Own Software\DartsScoreTracker\DartsScoreTracker\obj\Debug\DartsScoreTracker.pdb

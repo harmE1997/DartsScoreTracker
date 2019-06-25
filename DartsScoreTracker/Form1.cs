@@ -7,25 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace DartsScoreTracker
 {
     public partial class Form1 : Form
     {
-        private int LegsWon;
-        private int LegsLost;
-        private int ScoreLeft;
-        private int Turns;     
-        private Decimal Average;
-        private int TotalScore;
-        private int SetsWon;
-        private int SetsLost;
-        private Decimal Darts;
         private const int EnterKeyCode = 13;
-        private const char SplitChar = '.';
+        private GameManager gamemanager;
+        private const string FileName = "DartsGame";
         public Form1()
         {
             InitializeComponent();
+            gamemanager = new GameManager();
             ResetGame();
         }
 
@@ -36,20 +31,12 @@ namespace DartsScoreTracker
 
         private void btnNewLeg_Click(object sender, EventArgs e)
         {
-            ScoreLeft = 501;
-            Turns = 12;
-            BackColor = Color.Blue;
-            setLabels();
-            btnScore.Enabled = true;
+            gamemanager.NewLeg();
+            newLeg();
         }
         private void btnNewGame_Click(object sender, EventArgs e)
         {
             ResetGame();
-        }
-
-        private void btnScore_KeyDown(object sender, KeyEventArgs e)
-        {
-            MessageBox.Show("hit");
         }
 
         private void rtbScore_KeyPress(object sender, KeyPressEventArgs e)
@@ -58,95 +45,86 @@ namespace DartsScoreTracker
                 SubmitScore();
         }
 
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            using (FileStream stream = new FileStream(FileName, FileMode.Create))
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream, gamemanager);
+            }
+        }
+
+        private void btnLoad_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists(FileName))
+                MessageBox.Show("Can't load file! It doesn't exist!");
+
+            using (FileStream stream = new FileStream(FileName, FileMode.Open))
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                gamemanager = (GameManager)formatter.Deserialize(stream);
+            }
+
+            setLabels();
+            OutputStanding();
+        }
+
         private void setLabels()
         {
-            lblScore.Text = ScoreLeft.ToString();
-            lblTurns.Text = Turns.ToString();
+            lblScore.Text = gamemanager.ScoreLeft.ToString();
+            lblTurns.Text = gamemanager.Turns.ToString();
+            lblAVG.Text = gamemanager.Average.ToString();
         }
 
         private void OutputStanding()
         {
-            lblLegs.Text = LegsWon + " - " + LegsLost + "\n" + SetsWon + " - " + SetsLost;
+            lblLegs.Text = gamemanager.GetStanding();
         }
         private void SubmitScore()
         {
             string input = rtbScore.Text;
-            if (!input.Contains(SplitChar))
-            {
-                MessageBox.Show("invalid input");
-                return;
-            }
-            var i = input.Split(SplitChar);
-
-            if (!int.TryParse(i[0], out int score) || !int.TryParse(i[1], out int darts))
-            {
-                MessageBox.Show("Invalid input!");
-                rtbScore.Clear();
-                return;
-            }
-
             rtbScore.Clear();
-            if (score > 180 || Turns == 0)
+            var t = gamemanager.GetThrow(input);
+            if (t == null)
             {
-                MessageBox.Show("Score is too high or no more turns left!");
+                MessageBox.Show("Invalid input");
                 return;
             }
 
-            ScoreLeft -= score;
-            Turns--;
-            TotalScore += score;
-            Darts += darts;
-            setLabels();
-            CalculateAVG();
-            if (ScoreLeft == 0)
+            if (!gamemanager.ProcessThrow(t))
             {
-                //leg won
-                LegsWon++;
-                if(LegsWon == 3)
-                {
-                    LegsWon = 0;
-                    SetsWon++;
-                }
-                OutputStanding();
-                BackColor = Color.Green;
+                MessageBox.Show("Error! Score too high or no more turns left");
+                return;
             }
 
-            else if (Turns == 0)
-            {
-                //leg lost
-                LegsLost++;
-                if (LegsLost == 3)
-                {
-                    LegsLost = 0;
-                    SetsLost = 1;
-                }
-                OutputStanding();
-                BackColor = Color.Red;
+            if (gamemanager.ScoreLeft == 0)
+            {                
+                BackColor = Color.Green;
+                rtbScore.Enabled = false;
             }
+
+            else if (gamemanager.Turns == 0)
+            {
+                BackColor = Color.Red;
+                rtbScore.Enabled = false;
+            }
+            setLabels();
+            OutputStanding();
         }
 
         private void ResetGame()
         {
-            ScoreLeft = 501;
-            Turns = 12;
-            LegsWon = 0;
-            LegsLost = 0;
-            TotalScore = 0;
-            SetsWon = 0;
-            SetsLost = 0;
-            Darts = 0;
-            BackColor = Color.Blue;
-            setLabels();
+            gamemanager.ResetGame();
+            newLeg();
             OutputStanding();
             lblAVG.Text = "";
-            
         }
 
-        private void CalculateAVG()
+        private void newLeg()
         {
-            Decimal avg = (TotalScore / Darts) * 3;
-            Average = Math.Round(avg, 2);
-            lblAVG.Text = Average.ToString();
+            BackColor = Color.Blue;
+            setLabels();
+            rtbScore.Enabled = true;
         }
     }
 }
